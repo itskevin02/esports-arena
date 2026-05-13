@@ -30,6 +30,7 @@
         <module>msvc-match</module>
         <module>msvc-result</module>
         <module>msvc-ranking</module>
+        <module>msvc-registration</module>
         <module>msvc-sanction</module>
         <module>msvc-prize</module>
         <module>msvc-notification</module>
