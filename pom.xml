@@ -25,6 +25,10 @@
         <module>msvc-user</module>
         <module>msvc-game</module>
         <module>msvc-auth</module>
+        <module>msvc-team</module>
+        <module>msvc-tournement</module>
+        <module>msvc-registration</module>
+
     </modules>
 
 </project>
