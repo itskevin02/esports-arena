@@ -27,8 +27,12 @@
         <module>msvc-auth</module>
         <module>msvc-team</module>
         <module>msvc-tournement</module>
-        <module>msvc-registration</module>
-
+        <module>msvc-match</module>
+        <module>msvc-result</module>
+        <module>msvc-ranking</module>
+        <module>msvc-sanction</module>
+        <module>msvc-prize</module>
+        <module>msvc-notification</module>
     </modules>
 
 </project>

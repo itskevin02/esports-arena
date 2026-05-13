@@ -3,7 +3,13 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/msvc-auth/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-game/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-match/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-notification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-prize/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-ranking/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-registration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-result/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/msvc-sanction/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-team/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-tournement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-user/src/main/java" charset="UTF-8" />
