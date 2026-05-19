@@ -54,4 +54,3 @@ public class RegistrationModel {
     public LocalDateTime getFechaInscripcion() { return fechaInscripcion; }
     public void setFechaInscripcion(LocalDateTime fechaInscripcion) { this.fechaInscripcion = fechaInscripcion; }
 }
-asd
