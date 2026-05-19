@@ -26,7 +26,7 @@
         <module>msvc-game</module>
         <module>msvc-auth</module>
         <module>msvc-team</module>
-        <module>msvc-tournement</module>
+        <module>msvc-tournament</module>
         <module>msvc-match</module>
         <module>msvc-result</module>
         <module>msvc-ranking</module>
