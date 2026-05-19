@@ -7,7 +7,10 @@ import java.util.List;
 
 @Repository
 public interface MatchRepository extends JpaRepository<MatchModel, Long> {
-    // Permite el listado dinámico requerido por especificación
-    List<List<MatchModel>> findByTorneoIdAndRondaAndEstado(Long torneoId, Integer ronda, String estado);
     List<MatchModel> findByTorneoId(Long torneoId);
+    List<MatchModel> findByTorneoIdAndRonda(Long torneoId, Integer ronda);
+    List<MatchModel> findByEstado(String estado);
+
+    // Validador para evitar duplicar el mismo enfrentamiento exacto en la misma ronda
+    boolean existsByTorneoIdAndRondaAndParticipanteAIdAndParticipanteBId(Long torneoId, Integer ronda, Long participanteAId, Long participanteBId);
 }

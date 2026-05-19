@@ -6,112 +6,88 @@ import com.project.msvc_match.Model.MatchModel;
 import com.project.msvc_match.Repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
 
     private static final Logger log = LoggerFactory.getLogger(MatchService.class);
-    private final MatchRepository matchRepository;
 
-    public MatchService(MatchRepository matchRepository) {
-        this.matchRepository = matchRepository;
-    }
+    @Autowired
+    private MatchRepository repository;
 
-    // CREAR PARTIDA
-    public MatchDTO createMatch(MatchDTO dto) {
-        log.info("Iniciando creación de partida para el torneo ID: {}", dto.getTorneoId());
+    public MatchModel crearPartida(MatchDTO dto) {
+        log.info("Intentando programar una nueva partida para el torneo ID: {}, Ronda: {}", dto.getTorneoId(), dto.getRonda());
 
-        // REGLA DE NEGOCIO: Evitar que juegue contra sí mismo
+        // 1. Regla de negocio: No enfrentar a un participante consigo mismo
         if (dto.getParticipanteAId().equals(dto.getParticipanteBId())) {
-            log.error("Validación fallida: Un participante no puede enfrentarse a sí mismo.");
-            throw new MatchException("El participante A y B no pueden ser el mismo.");
+            log.error("Validación fallida: Un participante no puede jugar contra sí mismo.");
+            throw new MatchException("El participante A y el participante B no pueden ser el mismo.");
         }
 
-        // NOTA: Aquí iría la comunicación Feign/WebClient para validar si están inscritos en registration-service
-        // (Requisito: No crear partida con participante no inscrito)
+        // 2. Regla de negocio: Evitar duplicar enfrentamiento en la misma ronda
+        if (repository.existsByTorneoIdAndRondaAndParticipanteAIdAndParticipanteBId(
+                dto.getTorneoId(), dto.getRonda(), dto.getParticipanteAId(), dto.getParticipanteBId())) {
+            log.error("Validación fallida: El enfrentamiento ya existe en esta ronda.");
+            throw new MatchException("Este enfrentamiento ya se encuentra programado para la misma ronda.");
+        }
 
-        MatchModel match = new MatchModel(
+        // 3. Simulación de comunicación externa (Feign / WebClient)
+        // TODO: Validar en registration-service si los participantes están realmente inscritos y activos
+        boolean participantesInscritos = true;
+        if (!participantesInscritos) {
+            log.error("Validación fallida: Uno o ambos participantes no se encuentran debidamente inscritos.");
+            throw new MatchException("No se puede crear la partida: Participantes no válidos o no inscritos.");
+        }
+
+        MatchModel nuevaPartida = new MatchModel(
                 dto.getTorneoId(),
                 dto.getParticipanteAId(),
                 dto.getParticipanteBId(),
                 dto.getRonda(),
                 dto.getFechaHora(),
-                "PENDIENTE"
+                "PROGRAMADA"
         );
 
-        MatchModel savedMatch = matchRepository.save(match);
-        log.info("Partida creada exitosamente con ID: {}", savedMatch.getId());
-        return convertToDTO(savedMatch);
+        MatchModel guardado = repository.save(nuevaPartida);
+        log.info("Partida guardada exitosamente con el ID: {}", guardado.getId());
+        return guardado;
     }
 
-    // LISTAR PARTIDAS POR TORNEO
-    public List<MatchDTO> listByTorneo(Long torneoId) {
-        log.info("Buscando partidas para el torneo ID: {}", torneoId);
-        return matchRepository.findByTorneoId(torneoId).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<MatchModel> listarTodas() {
+        return repository.findAll();
     }
 
-    // BUSCAR POR ID
-    public MatchDTO findById(Long id) {
-        log.info("Buscando partida con ID: {}", id);
-        MatchModel match = matchRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Partida con ID {} no encontrada", id);
-                    return new MatchException("La partida no existe.");
-                });
-        return convertToDTO(match);
+    public List<MatchModel> listarPorTorneo(Long torneoId) {
+        return repository.findByTorneoId(torneoId);
     }
 
-    // ACTUALIZAR PARTIDA (Horario, participantes, estado)
-    public MatchDTO updateMatch(Long id, MatchDTO dto) {
-        log.info("Actualizando partida con ID: {}", id);
-        MatchModel match = matchRepository.findById(id)
-                .orElseThrow(() -> new MatchException("La partida no existe."));
+    public MatchModel buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new MatchException("Partida no encontrada con el ID: " + id));
+    }
 
-        // REGLA DE NEGOCIO: No iniciar partida cancelada
-        if ("CANCELADA".equals(match.getEstado()) && "EN_CURSO".equals(dto.getEstado())) {
-            log.error("Error de regla de negocio: Intento de iniciar una partida cancelada (ID: {})", id);
-            throw new MatchException("No se puede iniciar una partida que ya ha sido cancelada.");
+    public MatchModel actualizarEstado(Long id, String nuevoEstado) {
+        log.info("Solicitud para cambiar el estado de la partida ID: {} a {}", id, nuevoEstado);
+        MatchModel partida = buscarPorId(id);
+
+        // Regla de negocio mínima: No iniciar una partida que ya fue cancelada
+        if ("CANCELADA".equals(partida.getEstado()) && "EN_CURSO".equals(nuevoEstado)) {
+            log.error("Error de negocio: Intento inválido de iniciar una partida previamente cancelada.");
+            throw new MatchException("Operación no permitida: No se puede iniciar una partida que ha sido cancelada.");
         }
 
-        match.setParticipanteAId(dto.getParticipanteAId());
-        match.setParticipanteBId(dto.getParticipanteBId());
-        match.setFechaHora(dto.getFechaHora());
-        if (dto.getEstado() != null) {
-            match.setEstado(dto.getEstado());
-        }
-
-        MatchModel updatedMatch = matchRepository.save(match);
-        log.info("Partida ID: {} actualizada correctamente", id);
-        return convertToDTO(updatedMatch);
+        partida.setEstado(nuevoEstado);
+        return repository.save(partida);
     }
 
-    // CANCELAR PARTIDA (Desactivación lógica de registro)
-    public void cancelMatch(Long id) {
-        log.info("Solicitud para cancelar partida con ID: {}", id);
-        MatchModel match = matchRepository.findById(id)
-                .orElseThrow(() -> new MatchException("La partida no existe."));
-
-        match.setEstado("CANCELADA");
-        match.setRepository = matchRepository.save(match);
-        log.warn("Partida ID: {} ha sido CANCELADA", id);
-    }
-
-    // Conversor auxiliar de Entidad a DTO
-    private MatchDTO convertToDTO(MatchModel model) {
-        MatchDTO dto = new MatchDTO();
-        dto.setId(model.getId());
-        dto.setTorneoId(model.getTorneoId());
-        dto.setParticipanteAId(model.getParticipanteAId());
-        dto.setParticipanteBId(model.getParticipanteBId());
-        dto.setRonda(model.getRonda());
-        dto.setFechaHora(model.getFechaHora());
-        dto.setEstado(model.getEstado());
-        return dto;
+    public void cancelarPartida(Long id) {
+        log.info("Cancelando de forma definitiva la partida ID: {}", id);
+        MatchModel partida = buscarPorId(id);
+        partida.setEstado("CANCELADA");
+        repository.save(partida);
     }
 }

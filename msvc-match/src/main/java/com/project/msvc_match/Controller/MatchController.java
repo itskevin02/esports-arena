@@ -1,8 +1,10 @@
 package com.project.msvc_match.Controller;
 
 import com.project.msvc_match.DTO.MatchDTO;
+import com.project.msvc_match.Model.MatchModel;
 import com.project.msvc_match.Service.MatchService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,47 +12,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/api/matches")
+@RequestMapping("v1/api/match")
 public class MatchController {
 
-    private final MatchService matchService;
+    @Autowired
+    private MatchService service;
 
-    public MatchController(MatchService matchService) {
-        this.matchService = matchService;
-    }
-
-    // POST: Crear partida
     @PostMapping
-    public ResponseEntity<MatchDTO> createMatch(@Valid @RequestBody MatchDTO matchDTO) {
-        MatchDTO created = matchService.createMatch(matchDTO);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<MatchModel> crearPartida(@Valid @RequestBody MatchDTO dto) {
+        MatchModel creada = service.crearPartida(dto);
+        return new ResponseEntity<>(creada, HttpStatus.CREATED);
     }
 
-    // GET: Listar por Torneo
-    @GetMapping("/tournament/{torneoId}")
-    public ResponseEntity<List<MatchDTO>> listByTorneo(@PathVariable Long torneoId) {
-        List<MatchDTO> matches = matchService.listByTorneo(torneoId);
-        return ResponseEntity.ok(matches);
+    @GetMapping
+    public ResponseEntity<List<MatchModel>> listarTodas() {
+        return ResponseEntity.ok(service.listarTodas());
     }
 
-    // GET: Buscar partida por ID
     @GetMapping("/{id}")
-    public ResponseEntity<MatchDTO> findById(@PathVariable Long id) {
-        MatchDTO match = matchService.findById(id);
-        return ResponseEntity.ok(match);
+    public ResponseEntity<MatchModel> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    // PUT: Actualizar horario, participantes o estado
-    @PutMapping("/{id}")
-    public ResponseEntity<MatchDTO> updateMatch(@PathVariable Long id, @Valid @RequestBody MatchDTO matchDTO) {
-        MatchDTO updated = matchService.updateMatch(id, matchDTO);
-        return ResponseEntity.ok(updated);
+    @GetMapping("/torneo/{torneoId}")
+    public ResponseEntity<List<MatchModel>> listarPorTorneo(@PathVariable Long torneoId) {
+        return ResponseEntity.ok(service.listarPorTorneo(torneoId));
     }
 
-    // DELETE: Cancelar Partida (Eliminación lógica / Desactivar)
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<MatchModel> actualizarEstado(@PathVariable Long id, @RequestParam String estado) {
+        return ResponseEntity.ok(service.actualizarEstado(id, estado));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelMatch(@PathVariable Long id) {
-        matchService.cancelMatch(id);
+    public ResponseEntity<Void> cancelarPartida(@PathVariable Long id) {
+        service.cancelarPartida(id);
         return ResponseEntity.noContent().build();
     }
 }

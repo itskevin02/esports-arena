@@ -11,23 +11,23 @@ public class MatchModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "torneo_id", nullable = false)
+    @Column(nullable = false)
     private Long torneoId;
 
-    @Column(name = "participante_a_id", nullable = false)
+    @Column(nullable = false)
     private Long participanteAId;
 
-    @Column(name = "participante_b_id", nullable = false)
+    @Column(nullable = false)
     private Long participanteBId;
 
     @Column(nullable = false)
     private Integer ronda;
 
-    @Column(name = "fecha_hora", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime fechaHora;
 
     @Column(nullable = false)
-    private String estado; // PENDIENTE, EN_CURSO, FINALIZADA, CANCELADA
+    private String estado; // "PROGRAMADA", "EN_CURSO", "FINALIZADA", "CANCELADA"
 
     // Constructores
     public MatchModel() {}
@@ -44,22 +44,16 @@ public class MatchModel {
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public Long getTorneoId() { return torneoId; }
     public void setTorneoId(Long torneoId) { this.torneoId = torneoId; }
-
     public Long getParticipanteAId() { return participanteAId; }
     public void setParticipanteAId(Long participanteAId) { this.participanteAId = participanteAId; }
-
     public Long getParticipanteBId() { return participanteBId; }
     public void setParticipanteBId(Long participanteBId) { this.participanteBId = participanteBId; }
-
     public Integer getRonda() { return ronda; }
     public void setRonda(Integer ronda) { this.ronda = ronda; }
-
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
-
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 }
