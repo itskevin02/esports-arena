@@ -26,3 +26,4 @@ public class RegistrationDTO {
     public String getTipoParticipante() { return tipoParticipante; }
     public void setTipoParticipante(String tipoParticipante) { this.tipoParticipante = tipoParticipante; }
 }
+asd

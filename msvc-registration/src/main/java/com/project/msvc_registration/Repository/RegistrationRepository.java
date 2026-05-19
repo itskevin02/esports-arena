@@ -15,3 +15,4 @@ public interface RegistrationRepository extends JpaRepository<RegistrationModel,
     boolean existsByTorneoIdAndJugadorId(Long torneoId, Long jugadorId);
     boolean existsByTorneoIdAndEquipoId(Long torneoId, Long equipoId);
 }
+asd
