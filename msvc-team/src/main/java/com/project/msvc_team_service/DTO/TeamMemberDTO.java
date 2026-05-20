@@ -17,3 +17,4 @@ public class TeamMemberDTO {
     public String getRolDentroEquipo() { return rolDentroEquipo; }
     public void setRolDentroEquipo(String rolDentroEquipo) { this.rolDentroEquipo = rolDentroEquipo; }
 }
+asd

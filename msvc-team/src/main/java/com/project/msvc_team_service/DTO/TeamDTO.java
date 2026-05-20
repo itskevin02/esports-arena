@@ -39,3 +39,4 @@ public class TeamDTO {
     public List<TeamMemberDTO> getIntegrantes() { return integrantes; }
     public void setIntegrantes(List<TeamMemberDTO> integrantes) { this.integrantes = integrantes; }
 }
+asd

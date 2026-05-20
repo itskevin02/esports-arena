@@ -13,3 +13,4 @@ public interface TeamRepository extends JpaRepository<TeamModel, Long> {
     List<TeamModel> findByCapitanId(Long capitanId);
     List<TeamModel> findByEstado(String estado);
 }
+asd
