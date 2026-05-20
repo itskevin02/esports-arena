@@ -1,6 +1,5 @@
 package com.project.msvc_team_service.controller;
 
-import com.project.msvc_team_service.model.Team;
 import com.project.msvc_team_service.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -52,4 +52,3 @@ public class TeamModel {
     public List<TeamMemberModel> getIntegrantes() { return integrantes; }
     public void setIntegrantes(List<TeamMemberModel> integrantes) { this.integrantes = integrantes; }
 }
-asd
