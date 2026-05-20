@@ -1,11 +1,16 @@
 package com.project.msvc_registration.service;
 
+import com.project.msvc_registration.dto.TeamDTO;
+import com.project.msvc_registration.dto.TournamentDTO;
 import com.project.msvc_registration.model.Registration;
 import com.project.msvc_registration.repository.RegistrationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,6 +22,9 @@ public class RegistrationService {
     @Autowired
     private RegistrationRepository registrationRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public List<Registration> listarRegistrations() {
 
         logger.info("Listando inscripciones");
@@ -25,6 +33,23 @@ public class RegistrationService {
     }
 
     public Registration guardarRegistration(Registration registration) {
+
+        logger.info("Validando microservicios externos");
+
+        TeamDTO team = restTemplate.getForObject(
+                "http://localhost:8084/teams/" + registration.getEquipoId(),
+                TeamDTO.class);
+
+        TournamentDTO tournament = restTemplate.getForObject(
+                "http://localhost:8085/tournaments/" + registration.getTorneoId(),
+                TournamentDTO.class);
+
+        if (team == null || tournament == null) {
+
+            logger.error("Equipo o torneo no encontrado");
+
+            return null;
+        }
 
         logger.info("Guardando inscripcion");
 
@@ -42,7 +67,8 @@ public class RegistrationService {
 
         logger.info("Actualizando inscripcion con id: " + id);
 
-        Registration registrationExistente = registrationRepository.findById(id).orElse(null);
+        Registration registrationExistente =
+                registrationRepository.findById(id).orElse(null);
 
         if (registrationExistente != null) {
 
