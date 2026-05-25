@@ -18,7 +18,7 @@ Tecnologias Utilizadas:
 -Intellij IDEA
 -GitHub
 
-Arquitectura del Proyecto
+Arquitectura del Proyecto:
 -Controller
 -Service
 -Repository
@@ -26,9 +26,9 @@ Arquitectura del Proyecto
 -DTO
 -Exception
 
-donde Tambien entran implementada la arquitectura de microservicios
+donde Tambien entra implementada la arquitectura de microservicios
 
-Microservicios
+Microservicios:
 Actualmente Terminados
 
 Funcionalidades Implementadas:
