@@ -7,7 +7,7 @@ https://trello.com/invite/b/6a1511245ca5f4ad188f2c19/ATTI9da34528964cb7cb581e763
 
 Se utilizó Trello como herramienta colaborativa para la organización, planificación y seguimiento del desarrollo del proyecto.
 
----
+
 
 ## Descripción del Proyecto
 
@@ -17,17 +17,17 @@ El objetivo principal del proyecto es administrar información relacionada con u
 
 Actualmente el proyecto se encuentra en desarrollo académico utilizando Java, Maven y Spring Boot.
 
----
 
-## Integrantes
+
+# Integrantes
 
 - Vicente Pizarro
 - Kevin Reyes
 - Martin Vergara
 
----
 
-## Tecnologías Utilizadas
+
+# Tecnologías Utilizadas
 
 - Java 21
 - Spring Boot
@@ -40,9 +40,9 @@ Actualmente el proyecto se encuentra en desarrollo académico utilizando Java, M
 - Postman
 - SLF4J
 
----
 
-## Arquitectura del Proyecto
+
+# Arquitectura del Proyecto
 
 El proyecto implementa arquitectura distribuida basada en microservicios utilizando estructura CSR:
 
@@ -59,9 +59,9 @@ Además se implementaron:
 - APIs REST
 - Logs con SLF4J
 
----
 
-## Microservicios Implementados
+
+# Microservicios Implementados
 
 - auth-service
 - user-service
@@ -76,31 +76,31 @@ Además se implementaron:
 - notification-service
 - prize-service
 
----
 
-## Funcionalidades Implementadas
 
-### Configuración
+# Funcionalidades Implementadas
+
+## Configuración
 
 - Configuración Spring Boot
 - Configuración Maven
 - Configuración H2 Database
 - Configuración JPA/Hibernate
 
-### Arquitectura
+## Arquitectura
 
 - Arquitectura CSR
 - Organización de packages
 - Persistencia independiente
 - Comunicación REST entre microservicios
 
-### Persistencia
+## Persistencia
 
 - Creación automática de tablas con Hibernate
 - Base de datos en memoria H2
 - Repositories con JpaRepository
 
-### Validaciones y Manejo de Errores
+## Validaciones y Manejo de Errores
 
 - Bean Validation
 - GlobalExceptionHandler
@@ -108,11 +108,11 @@ Además se implementaron:
 - ResponseEntity
 - Manejo de errores REST
 
-### Logging
+## Logging
 
 - Logs estructurados utilizando SLF4J
 
----
+
 
 ## Control de Versiones
 
