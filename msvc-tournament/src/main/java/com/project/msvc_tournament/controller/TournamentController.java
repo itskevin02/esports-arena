@@ -4,6 +4,8 @@ import com.project.msvc_tournament.model.Tournament;
 import com.project.msvc_tournament.service.TournamentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,29 +18,57 @@ public class TournamentController {
     private TournamentService tournamentService;
 
     @GetMapping
-    public List<Tournament> listarTournaments() {
-        return tournamentService.listarTournaments();
+    public ResponseEntity<List<Tournament>> listar() {
+
+        List<Tournament> lista = tournamentService.listarTournaments();
+
+        return ResponseEntity.ok(lista);
     }
 
     @PostMapping
-    public Tournament guardarTournament(@Valid @RequestBody Tournament tournament) {
-        return tournamentService.guardarTournament(tournament);
+    public ResponseEntity<Tournament> guardar(
+            @Valid @RequestBody Tournament tournament
+    ) {
+
+        Tournament guardado =
+                tournamentService.guardarTournament(tournament);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @GetMapping("/{id}")
-    public Tournament buscarTournament(@PathVariable Long id) {
-        return tournamentService.buscarPorId(id);
+    public ResponseEntity<Tournament> buscarPorId(@PathVariable Long id) {
+
+        Tournament tournament = tournamentService.buscarPorId(id);
+
+        if (tournament != null) {
+            return ResponseEntity.ok(tournament);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public Tournament actualizarTournament(@PathVariable Long id,
-                                           @RequestBody Tournament tournament) {
+    public ResponseEntity<Tournament> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody Tournament tournament
+    ) {
 
-        return tournamentService.actualizarTournament(id, tournament);
+        Tournament actualizado =
+                tournamentService.actualizarTournament(id, tournament);
+
+        if (actualizado != null) {
+            return ResponseEntity.ok(actualizado);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarTournament(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+
         tournamentService.eliminarTournament(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

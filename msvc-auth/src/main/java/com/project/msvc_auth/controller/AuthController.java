@@ -4,6 +4,8 @@ import com.project.msvc_auth.model.Auth;
 import com.project.msvc_auth.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,29 +18,53 @@ public class AuthController {
     private AuthService authService;
 
     @GetMapping
-    public List<Auth> listarAuth() {
-        return authService.listarAuth();
+    public ResponseEntity<List<Auth>> listar() {
+
+        List<Auth> lista = authService.listarAuth();
+
+        return ResponseEntity.ok(lista);
     }
 
     @PostMapping
-    public Auth guardarAuth(@Valid @RequestBody Auth auth) {
-        return authService.guardarAuth(auth);
+    public ResponseEntity<Auth> guardar(@Valid @RequestBody Auth auth) {
+
+        Auth guardado = authService.guardarAuth(auth);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @GetMapping("/{id}")
-    public Auth buscarAuth(@PathVariable Long id) {
-        return authService.buscarPorId(id);
+    public ResponseEntity<Auth> buscarPorId(@PathVariable Long id) {
+
+        Auth auth = authService.buscarPorId(id);
+
+        if (auth != null) {
+            return ResponseEntity.ok(auth);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public Auth actualizarAuth(@PathVariable Long id,
-                               @RequestBody Auth auth) {
+    public ResponseEntity<Auth> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody Auth auth
+    ) {
 
-        return authService.actualizarAuth(id, auth);
+        Auth actualizado = authService.actualizarAuth(id, auth);
+
+        if (actualizado != null) {
+            return ResponseEntity.ok(actualizado);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarAuth(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+
         authService.eliminarAuth(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

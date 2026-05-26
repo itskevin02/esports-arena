@@ -4,8 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Result {
@@ -21,21 +22,20 @@ public class Result {
     private Long ganadorId;
 
     @NotNull(message = "El puntaje A es obligatorio")
+    @Min(value = 0, message = "El puntaje A no puede ser negativo")
     private Integer puntajeA;
 
     @NotNull(message = "El puntaje B es obligatorio")
+    @Min(value = 0, message = "El puntaje B no puede ser negativo")
     private Integer puntajeB;
 
-    @NotBlank(message = "El estado de validacion es obligatorio")
+    @NotBlank(message = "El estado de validación es obligatorio")
     private String estadoValidacion;
 
     public Result() {
     }
 
-    public Result(Long id, Long partidaId,
-                  Long ganadorId, Integer puntajeA,
-                  Integer puntajeB, String estadoValidacion) {
-
+    public Result(Long id, Long partidaId, Long ganadorId, Integer puntajeA, Integer puntajeB, String estadoValidacion) {
         this.id = id;
         this.partidaId = partidaId;
         this.ganadorId = ganadorId;

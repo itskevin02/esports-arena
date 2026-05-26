@@ -1,4 +1,4 @@
-package com.project.msvc_team_service.model;
+package com.project.msvc_team.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

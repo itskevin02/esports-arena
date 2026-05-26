@@ -4,6 +4,7 @@ public class TeamDTO {
 
     private Long id;
     private String nombre;
+    private String coach;
     private String estado;
 
     public TeamDTO() {
@@ -17,6 +18,10 @@ public class TeamDTO {
         return nombre;
     }
 
+    public String getCoach() {
+        return coach;
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -27,6 +32,10 @@ public class TeamDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setCoach(String coach) {
+        this.coach = coach;
     }
 
     public void setEstado(String estado) {

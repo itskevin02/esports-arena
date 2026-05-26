@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
+
+    Registration findByEquipoIdAndTorneoId(Long equipoId, Long torneoId);
+
+    long countByTorneoId(Long torneoId);
 }

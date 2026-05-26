@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Tournament {
@@ -20,7 +20,7 @@ public class Tournament {
     @NotBlank(message = "La ubicacion es obligatoria")
     private String ubicacion;
 
-    @NotNull(message = "La cantidad de equipos es obligatoria")
+    @Positive(message = "La cantidad de equipos debe ser mayor a 0")
     private Integer cantidadEquipos;
 
     @NotBlank(message = "El estado es obligatorio")
@@ -29,9 +29,7 @@ public class Tournament {
     public Tournament() {
     }
 
-    public Tournament(Long id, String nombre, String ubicacion,
-                      Integer cantidadEquipos, String estado) {
-
+    public Tournament(Long id, String nombre, String ubicacion, Integer cantidadEquipos, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;

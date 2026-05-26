@@ -1,7 +1,7 @@
-package com.project.msvc_team_service.service;
+package com.project.msvc_team.service;
 
-import com.project.msvc_team_service.model.Team;
-import com.project.msvc_team_service.repository.TeamRepository;
+import com.project.msvc_team.model.Team;
+import com.project.msvc_team.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;

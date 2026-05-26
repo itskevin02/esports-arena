@@ -1,4 +1,4 @@
-package com.project.msvc_team_service.exception;
+package com.project.msvc_team.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;

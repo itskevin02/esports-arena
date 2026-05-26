@@ -4,6 +4,8 @@ import com.project.msvc_sanction.model.Sanction;
 import com.project.msvc_sanction.service.SanctionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,29 +18,53 @@ public class SanctionController {
     private SanctionService sanctionService;
 
     @GetMapping
-    public List<Sanction> listarSanctions() {
-        return sanctionService.listarSanctions();
+    public ResponseEntity<List<Sanction>> listar() {
+
+        List<Sanction> lista = sanctionService.listarSanctions();
+
+        return ResponseEntity.ok(lista);
     }
 
     @PostMapping
-    public Sanction guardarSanction(@Valid @RequestBody Sanction sanction) {
-        return sanctionService.guardarSanction(sanction);
+    public ResponseEntity<Sanction> guardar(@Valid @RequestBody Sanction sanction) {
+
+        Sanction guardado = sanctionService.guardarSanction(sanction);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @GetMapping("/{id}")
-    public Sanction buscarSanction(@PathVariable Long id) {
-        return sanctionService.buscarPorId(id);
+    public ResponseEntity<Sanction> buscarPorId(@PathVariable Long id) {
+
+        Sanction sanction = sanctionService.buscarPorId(id);
+
+        if (sanction != null) {
+            return ResponseEntity.ok(sanction);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public Sanction actualizarSanction(@PathVariable Long id,
-                                       @RequestBody Sanction sanction) {
+    public ResponseEntity<Sanction> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody Sanction sanction
+    ) {
 
-        return sanctionService.actualizarSanction(id, sanction);
+        Sanction actualizado = sanctionService.actualizarSanction(id, sanction);
+
+        if (actualizado != null) {
+            return ResponseEntity.ok(actualizado);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarSanction(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+
         sanctionService.eliminarSanction(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

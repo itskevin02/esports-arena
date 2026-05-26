@@ -1,7 +1,7 @@
-package com.project.msvc_result.controller;
+package com.project.msvc_team.controller;
 
-import com.project.msvc_result.model.Result;
-import com.project.msvc_result.service.ResultService;
+import com.project.msvc_team.model.Team;
+import com.project.msvc_team.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,47 +11,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/results")
-public class ResultController {
+@RequestMapping("/teams")
+public class TeamController {
 
     @Autowired
-    private ResultService resultService;
+    private TeamService teamService;
 
     @GetMapping
-    public ResponseEntity<List<Result>> listar() {
+    public ResponseEntity<List<Team>> listar() {
 
-        List<Result> lista = resultService.listarResults();
+        List<Team> lista = teamService.listarTeams();
 
         return ResponseEntity.ok(lista);
     }
 
     @PostMapping
-    public ResponseEntity<Result> guardar(@Valid @RequestBody Result result) {
+    public ResponseEntity<Team> guardar(@Valid @RequestBody Team team) {
 
-        Result guardado = resultService.guardarResult(result);
+        Team guardado = teamService.guardarTeam(team);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Result> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Team> buscarPorId(@PathVariable Long id) {
 
-        Result result = resultService.buscarPorId(id);
+        Team team = teamService.buscarPorId(id);
 
-        if (result != null) {
-            return ResponseEntity.ok(result);
+        if (team != null) {
+            return ResponseEntity.ok(team);
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Result> actualizar(
+    public ResponseEntity<Team> actualizar(
             @PathVariable Long id,
-            @Valid @RequestBody Result result
+            @Valid @RequestBody Team team
     ) {
 
-        Result actualizado = resultService.actualizarResult(id, result);
+        Team actualizado = teamService.actualizarTeam(id, team);
 
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
@@ -63,7 +63,7 @@ public class ResultController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
 
-        resultService.eliminarResult(id);
+        teamService.eliminarTeam(id);
 
         return ResponseEntity.noContent().build();
     }
