@@ -1,4 +1,4 @@
-package com.project.msvc_game.config;
+package com.project.msvc_auth.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,7 +12,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Juegos")
+                        .title("API eSports Arena Manager")
                         .version("1.0")
                         .description("Documentación OpenAPI del microservicio de autenticación y gestión de acceso de eSports Arena Manager"));
     }

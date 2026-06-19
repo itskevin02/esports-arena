@@ -1,4 +1,4 @@
-package com.project.msvc_game.config;
+package com.project.msvc_prize.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI customOpenApi() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Juegos")
+                        .title("eSports Arena Manager API")
                         .version("1.0")
-                        .description("Documentación OpenAPI del microservicio de autenticación y gestión de acceso de eSports Arena Manager"));
+                        .description("Documentación OpenAPI del microservicio de gestión y asignación de premios de eSports Arena Manager"));
     }
 }
