@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: msvc-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: msvc-auth
+              uri: lb://msvc-auth
+              predicates:
+                - Path=/auth/**
+
+            - id: msvc-game
+              uri: lb://msvc-game
+              predicates:
+                - Path=/games/**
+
+            - id: msvc-user
+              uri: lb://msvc-user
+              predicates:
+                - Path=/users/**
+
+            - id: msvc-match
+              uri: lb://msvc-match
+              predicates:
+                - Path=/matches/**
+
+            - id: msvc-team
+              uri: lb://msvc-team-service
+              predicates:
+                - Path=/teams/**
+
+            - id: msvc-tournament
+              uri: lb://msvc-tournament
+              predicates:
+                - Path=/tournaments/**
+
+            - id: msvc-registration
+              uri: lb://msvc-registration
+              predicates:
+                - Path=/registrations/**
+
+            - id: msvc-result
+              uri: lb://msvc-result
+              predicates:
+                - Path=/results/**
+
+            - id: msvc-ranking
+              uri: lb://msvc-ranking
+              predicates:
+                - Path=/rankings/**
+
+            - id: msvc-sanction
+              uri: lb://msvc-sanction
+              predicates:
+                - Path=/sanctions/**
+
+            - id: msvc-prize
+              uri: lb://msvc-prize
+              predicates:
+                - Path=/prizes/**
+
+            - id: msvc-notification
+              uri: lb://msvc-notification
+              predicates:
+                - Path=/notifications/**
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
