@@ -1,4 +1,4 @@
-package com.project.msvc_registration.config;
+package com.project.msvc_sanction.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,7 +15,7 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("eSports Arena Manager API")
                         .version("1.0")
-                        .description("Documentación OpenAPI del microservicio de inscripciones"));
+                        .description("Documentación OpenAPI del microservicio de gestión de sanciones"));
     }
 
 }
