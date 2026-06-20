@@ -34,6 +34,8 @@
         <module>msvc-sanction</module>
         <module>msvc-prize</module>
         <module>msvc-notification</module>
+        <module>msvc-eureka</module>
+        <module>msvc-gateway</module>
     </modules>
 
 </project>
