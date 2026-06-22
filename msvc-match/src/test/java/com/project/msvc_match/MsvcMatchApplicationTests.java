@@ -1,10 +1,10 @@
-package com.project.msvc_game;
+package com.project.msvc_match;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsvcGameApplicationTests {
+class MsvcMatchApplicationTests {
 
 	@Test
 	void contextLoads() {

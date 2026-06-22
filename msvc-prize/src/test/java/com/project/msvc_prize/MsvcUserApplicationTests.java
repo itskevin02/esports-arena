@@ -1,10 +1,10 @@
-package com.project.msvc_user;
+package com.project.msvc_prize;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsvcMatchApplicationTests {
+class MsvcUserApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,10 +1,10 @@
-package com.project.msvc_team_service;
+package com.project.msvc_result;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsvcTeamServiceApplicationTests {
+class MsvcGameApplicationTests {
 
 	@Test
 	void contextLoads() {
