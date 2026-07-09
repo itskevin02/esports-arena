@@ -8,7 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,53 +24,141 @@ public class ResultServiceTest {
     private ResultService resultService;
 
     @Test
-    void listarResultsDebeRetornarLista() {
+    void listarResultsTest() {
 
         Result result = new Result();
+        result.setPartidaId(1L);
 
-        when(resultRepository.findAll()).thenReturn(List.of(result));
+        when(resultRepository.findAll()).thenReturn(Arrays.asList(result));
 
-        List<Result> resultado = resultService.listarResults();
-
-        assertEquals(1, resultado.size());
+        assertEquals(1, resultService.listarResults().size());
 
         verify(resultRepository, times(1)).findAll();
     }
 
     @Test
-    void guardarResultDebeGuardarCorrectamente() {
+    void buscarResultPorIdTest() {
 
         Result result = new Result();
-        result.setPuntajeA(2);
+        result.setId(1L);
+        result.setPartidaId(1L);
+
+        when(resultRepository.findById(1L)).thenReturn(Optional.of(result));
+
+        Result resultado = resultService.buscarPorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getPartidaId());
+
+        verify(resultRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void guardarResultTest() {
+
+        Result result = new Result();
+        result.setPartidaId(1L);
+        result.setGanadorId(2L);
+        result.setPuntajeA(3);
         result.setPuntajeB(1);
+        result.setEstadoValidacion("Validado");
 
         when(resultRepository.save(result)).thenReturn(result);
 
         Result resultado = resultService.guardarResult(result);
 
-        assertEquals(2, resultado.getPuntajeA());
-        assertEquals(1, resultado.getPuntajeB());
+        assertNotNull(resultado);
+        assertEquals(3, resultado.getPuntajeA());
 
         verify(resultRepository, times(1)).save(result);
     }
 
     @Test
-    void guardarResultDebeLanzarExcepcionSiPuntajeEsNegativo() {
+    void guardarResultConPuntajeNegativoTest() {
 
         Result result = new Result();
+        result.setPartidaId(1L);
+        result.setGanadorId(2L);
         result.setPuntajeA(-1);
-        result.setPuntajeB(3);
+        result.setPuntajeB(2);
+        result.setEstadoValidacion("Validado");
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
-                () -> resultService.guardarResult(result)
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            resultService.guardarResult(result);
+        });
 
-        assertEquals(
-                "Los puntajes no pueden ser negativos",
-                exception.getMessage()
-        );
+        assertEquals("Los puntajes no pueden ser negativos", exception.getMessage());
 
         verify(resultRepository, never()).save(any(Result.class));
     }
+
+    @Test
+    void actualizarResultTest() {
+
+        Result resultExistente = new Result();
+        resultExistente.setId(1L);
+        resultExistente.setPartidaId(1L);
+        resultExistente.setGanadorId(2L);
+        resultExistente.setPuntajeA(2);
+        resultExistente.setPuntajeB(1);
+        resultExistente.setEstadoValidacion("Pendiente");
+
+        Result nuevoResult = new Result();
+        nuevoResult.setPartidaId(2L);
+        nuevoResult.setGanadorId(3L);
+        nuevoResult.setPuntajeA(5);
+        nuevoResult.setPuntajeB(4);
+        nuevoResult.setEstadoValidacion("Validado");
+
+        when(resultRepository.findById(1L)).thenReturn(Optional.of(resultExistente));
+        when(resultRepository.save(any(Result.class))).thenReturn(resultExistente);
+
+        Result resultado = resultService.actualizarResult(1L, nuevoResult);
+
+        assertNotNull(resultado);
+        assertEquals(2L, resultado.getPartidaId());
+        assertEquals(3L, resultado.getGanadorId());
+        assertEquals(5, resultado.getPuntajeA());
+        assertEquals(4, resultado.getPuntajeB());
+        assertEquals("Validado", resultado.getEstadoValidacion());
+
+        verify(resultRepository, times(1)).findById(1L);
+        verify(resultRepository, times(1)).save(any(Result.class));
+    }
+
+    @Test
+    void actualizarResultConPuntajeNegativoTest() {
+
+        Result resultExistente = new Result();
+        resultExistente.setId(1L);
+        resultExistente.setPuntajeA(2);
+        resultExistente.setPuntajeB(1);
+
+        Result nuevoResult = new Result();
+        nuevoResult.setPartidaId(2L);
+        nuevoResult.setGanadorId(3L);
+        nuevoResult.setPuntajeA(-5);
+        nuevoResult.setPuntajeB(4);
+        nuevoResult.setEstadoValidacion("Validado");
+
+        when(resultRepository.findById(1L)).thenReturn(Optional.of(resultExistente));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            resultService.actualizarResult(1L, nuevoResult);
+        });
+
+        assertEquals("Los puntajes no pueden ser negativos", exception.getMessage());
+
+        verify(resultRepository, times(1)).findById(1L);
+        verify(resultRepository, never()).save(any(Result.class));
+    }
+
+    @Test
+    void eliminarResultTest() {
+
+        resultService.eliminarResult(1L);
+
+        verify(resultRepository, times(1)).deleteById(1L);
+    }
+
 }

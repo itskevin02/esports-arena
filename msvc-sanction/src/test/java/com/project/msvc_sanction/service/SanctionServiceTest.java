@@ -8,9 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,40 +24,88 @@ public class SanctionServiceTest {
     private SanctionService sanctionService;
 
     @Test
-    void listarSanctionsDebeRetornarLista() {
+    void listarSanctionsTest() {
 
         Sanction sanction = new Sanction();
-        sanction.setMotivo("Conducta antideportiva");
+        sanction.setMotivo("Motivo 1");
 
-        when(sanctionRepository.findAll()).thenReturn(List.of(sanction));
+        when(sanctionRepository.findAll()).thenReturn(Arrays.asList(sanction));
 
-        List<Sanction> resultado = sanctionService.listarSanctions();
-
-        assertEquals(1, resultado.size());
-        assertEquals(
-                "Conducta antideportiva",
-                resultado.get(0).getMotivo()
-        );
+        assertEquals(1, sanctionService.listarSanctions().size());
 
         verify(sanctionRepository, times(1)).findAll();
     }
 
     @Test
-    void guardarSanctionDebeGuardarCorrectamente() {
+    void buscarSanctionPorIdTest() {
 
         Sanction sanction = new Sanction();
-        sanction.setMotivo("Conducta antideportiva");
+        sanction.setId(1L);
+        sanction.setMotivo("Motivo 1");
+
+        when(sanctionRepository.findById(1L)).thenReturn(Optional.of(sanction));
+
+        Sanction resultado = sanctionService.buscarPorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals("Motivo 1", resultado.getMotivo());
+
+        verify(sanctionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void guardarSanctionTest() {
+
+        Sanction sanction = new Sanction();
+        sanction.setMotivo("Nuevo Motivo");
 
         when(sanctionRepository.save(sanction)).thenReturn(sanction);
 
-        Sanction resultado =
-                sanctionService.guardarSanction(sanction);
+        Sanction resultado = sanctionService.guardarSanction(sanction);
 
-        assertEquals(
-                "Conducta antideportiva",
-                resultado.getMotivo()
-        );
+        assertNotNull(resultado);
+        assertEquals("Nuevo Motivo", resultado.getMotivo());
 
         verify(sanctionRepository, times(1)).save(sanction);
     }
+
+    @Test
+    void actualizarSanctionTest() {
+
+        Sanction sanctionExistente = new Sanction();
+        sanctionExistente.setId(1L);
+        sanctionExistente.setUsuarioId(1L);
+        sanctionExistente.setMotivo("Motivo 1");
+        sanctionExistente.setSeveridad("Media");
+        sanctionExistente.setEstado("Activo");
+
+        Sanction nuevaSanction = new Sanction();
+        nuevaSanction.setUsuarioId(2L);
+        nuevaSanction.setMotivo("Motivo Actualizado");
+        nuevaSanction.setSeveridad("Alta");
+        nuevaSanction.setEstado("Inactivo");
+
+        when(sanctionRepository.findById(1L)).thenReturn(Optional.of(sanctionExistente));
+        when(sanctionRepository.save(any(Sanction.class))).thenReturn(sanctionExistente);
+
+        Sanction resultado = sanctionService.actualizarSanction(1L, nuevaSanction);
+
+        assertNotNull(resultado);
+        assertEquals(2L, resultado.getUsuarioId());
+        assertEquals("Motivo Actualizado", resultado.getMotivo());
+        assertEquals("Alta", resultado.getSeveridad());
+        assertEquals("Inactivo", resultado.getEstado());
+
+        verify(sanctionRepository, times(1)).findById(1L);
+        verify(sanctionRepository, times(1)).save(any(Sanction.class));
+    }
+
+    @Test
+    void eliminarSanctionTest() {
+
+        sanctionService.eliminarSanction(1L);
+
+        verify(sanctionRepository, times(1)).deleteById(1L);
+    }
+
 }
